@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <title>Mrs. Cupcake ✨ | A Special Tribute to Mrittica Didi from Arnab</title>
+  <meta name="description" content="A handcrafted website celebrating Mrittica Naskar (Mrs. Cupcake) at 24. Filled with stories, quizzes, memories, games, and the song Fakira by Sanam Puri.">
+
+  <!-- Mobile & OS Integration Meta (iOS & Android) -->
+  <meta name="theme-color" content="#150921" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#2a1135" media="(prefers-color-scheme: light)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Mrs. Cupcake">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient Sparkle Canvas -->
+  <canvas id="ambient-canvas"></canvas>
+
+  <!-- Welcome / Music Activation Overlay -->
+  <div id="welcome-modal" class="welcome-overlay">
+    <div class="welcome-card glass-panel">
+      <div class="welcome-crown">👑</div>
+      <div class="welcome-badge">A Heartfelt Tribute from Arnab</div>
+      <h1 class="welcome-title">Welcome to the World of<br><span class="highlight-text">Mrs. Cupcake</span> 🧁</h1>
+      <p class="welcome-desc">
+        Dedicated to the most amazing elder sister, <strong>Mrittica Naskar</strong>.<br>
+        24 years of sweetness, laughter, and unbreakable memories!
+      </p>
+
+      <div class="welcome-audio-teaser">
+        <span class="music-icon-pulse">🎵</span>
+        <span>Featuring Background Song: <strong>"Fakira" by Sanam Puri</strong></span>
+      </div>
+
+      <button id="enter-btn" class="btn-primary pulse-btn">
+        <span class="btn-icon">✨</span>
+        <span class="btn-text">Enter & Play "Fakira"</span>
+        <span class="btn-arrow">→</span>
+      </button>
+
+      <p class="welcome-subtext">Click above to unlock the music, stories, games & memories!</p>
+    </div>
+  </div>
+
+  <!-- Floating Background Music Player -->
+  <aside class="floating-music-bar glass-panel" id="music-player-widget">
+    <div class="music-cover-wrapper" id="disc-cover">
+      <img src="assets/images/cupcake_hero.jpg" alt="Fakira Cover" class="music-disc-img">
+      <div class="disc-hole"></div>
+    </div>
+    <div class="music-info">
+      <div class="music-title-row">
+        <span class="music-title">Fakira</span>
+        <span class="music-badge">Sanam Puri</span>
+      </div>
+      <div class="music-status-row">
+        <div class="equalizer-bars" id="eq-bars">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+        <span class="track-status" id="track-status-text">Ready to play</span>
+      </div>
+    </div>
+    <div class="music-controls">
+      <button class="music-btn" id="music-toggle-btn" title="Play/Pause" aria-label="Play or Pause Song">
+        <svg id="play-icon" viewBox="0 0 24 24" class="svg-icon"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+        <svg id="pause-icon" viewBox="0 0 24 24" class="svg-icon hidden"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+      </button>
+      <button class="music-btn" id="lyrics-toggle-btn" title="View Song Lyrics" aria-label="Toggle Lyrics">
+        <svg viewBox="0 0 24 24" class="svg-icon"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+      </button>
+      <div class="volume-slider-wrapper">
+        <button class="music-btn" id="mute-toggle-btn" title="Mute/Unmute" aria-label="Mute">
+          <svg id="volume-high-icon" viewBox="0 0 24 24" class="svg-icon"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+          <svg id="volume-mute-icon" viewBox="0 0 24 24" class="svg-icon hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        </button>
+        <input type="range" id="volume-slider" min="0" max="100" value="80" aria-label="Volume Slider">
+      </div>
+    </div>
+  </aside>
+
+  <!-- Floating Lyrics Popup Card -->
+  <div id="lyrics-popup" class="lyrics-card glass-panel hidden">
+    <div class="lyrics-header">
+      <div class="lyrics-title-group">
+        <h4>Fakira (Sanam Puri Version)</h4>
+        <p>Student of the Year 2 • Sibling Vibe Anthem</p>
+      </div>
+      <button id="close-lyrics-btn" class="close-btn" aria-label="Close Lyrics">&times;</button>
+    </div>
+    <div class="lyrics-body">
+      <p class="lyric-line highlight">"Tu mere roobaroo har dafa ho gaya..."</p>
+      <p class="lyric-line">"Bebasi mein meri tu dua ho gaya..."</p>
+      <p class="lyric-line highlight">"Fakira dharndha phire yaara, fakira dharndha phire..."</p>
+      <p class="lyric-line">"Kahin te mil jave mera dildar fakira dharndha phire!"</p>
+      <p class="lyric-note">A song of warmth, comfort, and someone who always feels like home — just like having Didi around. 💖</p>
+    </div>
+  </div>
+
+  <!-- Offscreen YouTube Player Container -->
+  <div id="yt-player-container" class="offscreen-player">
+    <div id="youtube-audio-player"></div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <div class="nav-container glass-panel">
+      <a href="#hero" class="nav-logo">
+        <span class="logo-emoji">🧁</span>
+        <span class="logo-text">Mrs. Cupcake</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#hero">Home</a>
+        <a href="#story">Our Story</a>
+        <a href="#memory-slider-section">Photo Slider</a>
+        <a href="#gallery">Memories</a>
+        <a href="#reasons-slider-section">24 Reasons</a>
+        <a href="#arcade-hub">Arcade (4 Games!)</a>
+        <a href="#cake-studio-section">Cake Studio</a>
+        <a href="#quiz">Didi Quiz</a>
+        <a href="#letter">Arnab's Letter</a>
+      </nav>
+      <div class="nav-actions">
+        <button id="appreciation-heart-btn" class="nav-heart-btn" title="Send Didi Love!">
+          <span class="heart-icon">💖</span>
+          <span class="heart-counter" id="nav-love-count">2002</span>
+        </button>
+        <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Drawer (iOS & Android) -->
+  <div id="mobile-nav-drawer" class="mobile-nav-drawer glass-panel" aria-hidden="true">
+    <div class="mobile-nav-header">
+      <div class="mobile-nav-brand">
+        <span class="m-brand-emoji">🧁</span>
+        <span class="m-brand-text">Mrs. Cupcake</span>
+      </div>
+      <button id="close-mobile-menu-btn" class="mobile-nav-close-btn" aria-label="Close menu">&times;</button>
+    </div>
+    <nav class="mobile-nav-links">
+      <a href="#hero" class="mobile-nav-link">
+        <span class="m-icon">🏠</span>
+        <span class="m-text">Home</span>
+      </a>
+      <a href="#story" class="mobile-nav-link">
+        <span class="m-icon">📖</span>
+        <span class="m-text">Our Story</span>
+      </a>
+      <a href="#memory-slider-section" class="mobile-nav-link">
+        <span class="m-icon">🎞️</span>
+        <span class="m-text">Photo Slider</span>
+      </a>
+      <a href="#gallery" class="mobile-nav-link">
+        <span class="m-icon">📸</span>
+        <span class="m-text">Memories</span>
+      </a>
+      <a href="#reasons-slider-section" class="mobile-nav-link">
+        <span class="m-icon">👑</span>
+        <span class="m-text">24 Reasons Reel</span>
+      </a>
+      <a href="#arcade-hub" class="mobile-nav-link">
+        <span class="m-icon">🎮</span>
+        <span class="m-text">Arcade (4 Games!)</span>
+      </a>
+      <a href="#cake-studio-section" class="mobile-nav-link">
+        <span class="m-icon">🎂</span>
+        <span class="m-text">Cake Studio</span>
+      </a>
+      <a href="#quiz" class="mobile-nav-link">
+        <span class="m-icon">🎯</span>
+        <span class="m-text">Didi Quiz</span>
+      </a>
+      <a href="#letter" class="mobile-nav-link">
+        <span class="m-icon">💌</span>
+        <span class="m-text">Arnab's Letter</span>
+      </a>
+    </nav>
+    <div class="mobile-nav-footer">
+      <span class="m-footer-tag">Made with 💖 by Arnab for Mrittica Didi</span>
+    </div>
+  </div>
+  <div id="mobile-nav-backdrop" class="mobile-nav-backdrop"></div>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section id="hero" class="hero-section">
+      <div class="hero-container">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="badge-star">✨</span>
+            <span>Celebrating 24 Years of Grace • Born 2002</span>
+            <span class="badge-star">✨</span>
+          </div>
+          <h1 class="hero-title">
+            The Queen of Sweetness,<br>
+            <span class="gradient-text">Mrittica Naskar</span>
+          </h1>
+          <p class="hero-tagline">
+            Affectionately crowned as <span class="tag-highlight">Mrs. Cupcake</span> by her favorite brother <strong>Arnab</strong>.
+            A bond woven with laughter, secret treats, playful arguments, and unending love.
+          </p>
+
+          <div class="hero-stat-pills">
+            <div class="stat-pill glass-pill">
+              <span class="stat-icon">🎂</span>
+              <div class="stat-info">
+                <strong>Age 24</strong>
+                <span>Born in 2002</span>
+              </div>
+            </div>
+            <div class="stat-pill glass-pill">
+              <span class="stat-icon">👑</span>
+              <div class="stat-info">
+                <strong>Super Didi</strong>
+                <span>Protector & Mentor</span>
+              </div>
+            </div>
+            <div class="stat-pill glass-pill">
+              <span class="stat-icon">🧁</span>
+              <div class="stat-info">
+                <strong>Mrs. Cupcake</strong>
+                <span>Official Sibling Title</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-cta-group">
+            <a href="#story" class="btn-primary">
+              <span>Read Our Story</span>
+              <span>📖</span>
+            </a>
+            <a href="#quiz" class="btn-secondary">
+              <span>Play Didi's Quiz</span>
+              <span>🎯</span>
+            </a>
+            <button id="cupcake-shower-btn" class="btn-outline">
+              <span>Shower Cupcakes</span>
+              <span>🎉</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="visual-card-stack">
+            <!-- 3D Mascot Card -->
+            <div class="cupcake-mascot-card glass-panel floating-anim">
+              <div class="mascot-img-wrapper">
+                <img src="assets/images/cupcake_hero.jpg" alt="Mrs Cupcake Mascot" class="mascot-img">
+                <div class="glow-ring"></div>
+              </div>
+              <div class="mascot-details">
+                <span class="mascot-crown">👑</span>
+                <h3>Mrs. Cupcake</h3>
+                <p>Sweet • Sassy • Unstoppable</p>
+                <div class="sweetness-meter">
+                  <div class="meter-label">
+                    <span>Sweetness Level</span>
+                    <span>1000%</span>
+                  </div>
+                  <div class="meter-bar"><div class="meter-fill" style="width: 100%;"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Authentic Photo Frame Card -->
+            <div class="photo-accent-card glass-panel rotate-card">
+              <div class="photo-wrapper">
+                <img src="assets/images/didi_puja_festive.jpg" alt="Arnab and Didi during Puja" class="accent-photo">
+                <div class="photo-tape"></div>
+              </div>
+              <div class="photo-caption">
+                <span class="caption-quote">"Always shining beside my Didi!"</span>
+                <span class="caption-author">— Arnab & Mrittica</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Interactive Cupcake Meter -->
+      <div class="hero-interactive-bar glass-panel">
+        <div class="bar-item">
+          <span class="interactive-icon">🧁</span>
+          <div>
+            <h4>Send Didi a Cupcake</h4>
+            <p>Tap repeatedly to shower Mrs. Cupcake with sibling love!</p>
+          </div>
+        </div>
+        <div class="bar-action">
+          <button id="tap-cupcake-btn" class="tap-heart-btn">
+            <span class="tap-icon">🧁</span>
+            <span class="tap-text">Tap For Love!</span>
+            <span class="tap-badge" id="cupcake-counter">24</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STORY SECTION -->
+    <section id="story" class="story-section">
+      <div class="section-header text-center">
+        <span class="section-tag">Heartwarming Chronicles</span>
+        <h2 class="section-title">The Story of Mrs. Cupcake & Her Little Bro</h2>
+        <p class="section-subtitle">
+          From childhood laughter to celebrating her 24th year, every chapter of Mrittica & Arnab’s journey is pure gold.
+        </p>
+      </div>
+
+      <div class="timeline-container">
+        <!-- Chapter 1 -->
+        <article class="timeline-card glass-panel" data-aos="fade-up">
+          <div class="timeline-meta">
+            <span class="chapter-badge">Chapter I</span>
+            <span class="timeline-year">2002</span>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-text">
+              <h3 class="timeline-heading">The Arrival of the Sweetest Soul</h3>
+              <p>
+                In the year 2002, the universe gifted the family a little angel named <strong>Mrittica</strong>.
+                From her very first smile, she radiated warmth and kindness. Little did everyone know back then,
+                she would grow up to become the most affectionate, protective, and delightful elder sister in the world!
+              </p>
+              <div class="story-highlight-box">
+                <span class="quote-symbol">“</span>
+                <p>An elder sister is a little bit of a mother, a little bit of a best friend, and a whole lot of a partner in crime.</p>
+              </div>
+            </div>
+            <div class="timeline-asset">
+              <div class="milestone-badge">
+                <span class="milestone-icon">🌟</span>
+                <span class="milestone-number">24</span>
+                <span class="milestone-sub">Years of Awesomeness</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chapter 2 -->
+        <article class="timeline-card glass-panel" data-aos="fade-up">
+          <div class="timeline-meta">
+            <span class="chapter-badge">Chapter II</span>
+            <span class="timeline-year">The Secret Code</span>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-text">
+              <h3 class="timeline-heading">Why She Was Crowned "Mrs. Cupcake"</h3>
+              <p>
+                People often ask, <em>"Why does Arnab call his Didi 'Mrs. Cupcake'?"</em>
+                Well, look closely at a cupcake: it's sweet, colourful, brings instant happiness to everyone who sees it,
+                and has just that irresistible sprinkle of drama and sweetness on top!
+              </p>
+              <p>
+                Whether she's scolding Arnab for staying up late or secretly slipping him extra treats, she is forever
+                the sweet confectionery heart of our home.
+              </p>
+              <div class="cupcake-recipe-card">
+                <h4>✨ The Mrs. Cupcake Recipe:</h4>
+                <ul>
+                  <li>🧁 40% Sweetness & Big Sister Care</li>
+                  <li>✨ 30% Glamour, Sarees & Glowing Smiles</li>
+                  <li>🎯 20% Boss Energy & Scolding Arnab</li>
+                  <li>💖 10% Pure Unconditional Love</li>
+                </ul>
+              </div>
+            </div>
+            <div class="timeline-asset">
+              <img src="assets/images/cupcake_hero.jpg" alt="Cupcake Mascot" class="story-img-mascot">
+            </div>
+          </div>
+        </article>
+
+        <!-- Chapter 3 -->
+        <article class="timeline-card glass-panel" data-aos="fade-up">
+          <div class="timeline-meta">
+            <span class="chapter-badge">Chapter III</span>
+            <span class="timeline-year">Festive Glory</span>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-text">
+              <h3 class="timeline-heading">Durga Puja, Colors & Bengali Elegance</h3>
+              <p>
+                Nothing compares to the joyous festival days. With Didi adorned in her gorgeous vibrant yellow saree
+                and Arnab in his royal purple kurta, celebrating Bijoya, Sindoor Khela, and festive nights.
+              </p>
+              <p>
+                Amidst the dhol beats, the dhunuchi dances, and the abir colors on our foreheads, those candid smiles
+                capture what family truly means. Didi isn't just an elder sister; she's the festive light of our celebrations!
+              </p>
+              <div class="story-tag-list">
+                <span class="story-pill">#PujaVibes</span>
+                <span class="story-pill">#BengaliRoyalty</span>
+                <span class="story-pill">#DidiAndBhai</span>
+              </div>
+            </div>
+            <div class="timeline-asset">
+              <div class="story-photo-frame">
+                <img src="assets/images/didi_puja_festive.jpg" alt="Festive Puja with Didi" class="story-actual-img" onclick="openLightbox(this.src, 'Durga Puja Celebrations with Mrs. Cupcake')">
+                <span class="click-zoom-hint">🔍 Click to zoom</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chapter 4 -->
+        <article class="timeline-card glass-panel" data-aos="fade-up">
+          <div class="timeline-meta">
+            <span class="chapter-badge">Chapter IV</span>
+            <span class="timeline-year">Wanderlust</span>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-text">
+              <h3 class="timeline-heading">Mountain Strolls & Red Panda Companions</h3>
+              <p>
+                Remember that brisk mountain getaway? Walking down Mall Road, shopping along the hill-station avenues,
+                laughing in front of the giant red panda mascot, and striking goofy poses with thumbs up!
+              </p>
+              <p>
+                Through chilly breezes and steaming cups of tea, trips with Didi are always the happiest escapes.
+                She is always ready to explore, take hundred candid photos, and make every journey unforgettable.
+              </p>
+            </div>
+            <div class="timeline-asset">
+              <div class="story-photo-frame">
+                <img src="assets/images/didi_vacation_mallroad.jpg" alt="Mall Road Red Panda Photo" class="story-actual-img" onclick="openLightbox(this.src, 'Mall Road Vacation Memories with Didi')">
+                <span class="click-zoom-hint">🔍 Click to zoom</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chapter 5 -->
+        <article class="timeline-card glass-panel" data-aos="fade-up">
+          <div class="timeline-meta">
+            <span class="chapter-badge">Chapter V</span>
+            <span class="timeline-year">Candid Evenings</span>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-text">
+              <h3 class="timeline-heading">Late-Night Chats & Everyday Magic</h3>
+              <p>
+                From casual selfies wearing cool glasses, strolling under the city night lights, to wearing graphic tees
+                reminding each other to <em>"Grow. There's a future version don't look back."</em>
+              </p>
+              <p>
+                Beyond the big occasions, it's the quiet moments—the quick selfies, the late-night tea gossip, the reassurance
+                that whatever happens, we face it together—that make the bond between Arnab and Mrittica eternal.
+              </p>
+            </div>
+            <div class="timeline-asset duo-photos">
+              <div class="story-photo-frame mini">
+                <img src="assets/images/didi_evening_selfie.jpg" alt="Evening Selfie with Glasses" class="story-actual-img" onclick="openLightbox(this.src, 'Cozy Evening Selfie with Didi')">
+              </div>
+              <div class="story-photo-frame mini">
+                <img src="assets/images/didi_night_walk.jpg" alt="Night Stroll Selfie" class="story-actual-img" onclick="openLightbox(this.src, 'Night Walk Vibes with Mrs. Cupcake')">
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- CINEMATIC MEMORY PHOTO SLIDER SECTION -->
+    <section id="memory-slider-section" class="slider-section">
+      <div class="section-header text-center">
+        <span class="section-tag">Cinematic Memories</span>
+        <h2 class="section-title">Sisterhood in Motion 🎞️</h2>
+        <p class="section-subtitle">Swipe through full-screen panoramic slides celebrating Mrittica Didi and Arnab.</p>
+      </div>
+
+      <div class="slider-wrapper glass-panel" id="memory-slider-wrapper">
+        <div class="slider-track" id="memory-slider-track">
+          <!-- Slide 1 -->
+          <div class="slider-slide active" data-index="0">
+            <div class="slide-media">
+              <img src="assets/images/didi_puja_festive.jpg" alt="Durga Puja Celebrations" class="slide-img">
+              <div class="slide-gradient-overlay"></div>
+            </div>
+            <div class="slide-content">
+              <span class="slide-pill">✨ Festive Splendor • Bijoya</span>
+              <h3 class="slide-title">Durga Puja & Bengali Royal Grace</h3>
+              <p class="slide-desc">Didi adorned in her radiant yellow saree with Arnab in royal purple. Amidst the dhunuchi beats and Bijoya smiles, she outshines every festive light in the city.</p>
+              <div class="slide-tags">
+                <span>#PujaRoyalty</span>
+                <span>#YellowSareeQueen</span>
+                <span>#SindoorKhela</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 2 -->
+          <div class="slider-slide" data-index="1">
+            <div class="slide-media">
+              <img src="assets/images/didi_vacation_mallroad.jpg" alt="Mall Road Red Panda" class="slide-img">
+              <div class="slide-gradient-overlay"></div>
+            </div>
+            <div class="slide-content">
+              <span class="slide-pill">🐾 Mountain Getaway • Mall Road</span>
+              <h3 class="slide-title">Hill Station Escapades & Red Panda Mascot</h3>
+              <p class="slide-desc">Strolling down the chilly mountain promenade, goofy thumbs-up poses with the giant fluffy red panda, sipping steaming mountain tea, and laughing non-stop.</p>
+              <div class="slide-tags">
+                <span>#MallRoadAdventures</span>
+                <span>#RedPandaSquad</span>
+                <span>#MountainVibes</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 3 -->
+          <div class="slider-slide" data-index="2">
+            <div class="slide-media">
+              <img src="assets/images/didi_evening_selfie.jpg" alt="Evening Selfie with Glasses" class="slide-img">
+              <div class="slide-gradient-overlay"></div>
+            </div>
+            <div class="slide-content">
+              <span class="slide-pill">👓 Signature Specs • Evening Gossip</span>
+              <h3 class="slide-title">Specs, Sass & Intellectual Charm</h3>
+              <p class="slide-desc">Nobody rocks glasses with this much elegance. Quiet evening tea sessions, sharing hilarious gossip, and receiving the most candid elder sister guidance.</p>
+              <div class="slide-tags">
+                <span>#SignatureGlasses</span>
+                <span>#SisterlyWisdom</span>
+                <span>#EveningChills</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 4 -->
+          <div class="slider-slide" data-index="3">
+            <div class="slide-media">
+              <img src="assets/images/didi_night_walk.jpg" alt="Night City Walk" class="slide-img">
+              <div class="slide-gradient-overlay"></div>
+            </div>
+            <div class="slide-content">
+              <span class="slide-pill">🌙 Night City Walk • Sibling Creed</span>
+              <h3 class="slide-title">"Grow. There Is A Future Version, Don't Look Back"</h3>
+              <p class="slide-desc">Walking together under neon avenue lights, reminding each other that every tomorrow holds greater victories. An unbreakable team facing the world together.</p>
+              <div class="slide-tags">
+                <span>#FutureVersion</span>
+                <span>#SiblingStrength</span>
+                <span>#NightPromenade</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 5 -->
+          <div class="slider-slide" data-index="4">
+            <div class="slide-media">
+              <img src="assets/images/cupcake_hero.jpg" alt="Mrs Cupcake Crown" class="slide-img">
+              <div class="slide-gradient-overlay"></div>
+            </div>
+            <div class="slide-content">
+              <span class="slide-pill">👑 24 Years • Crown of Sweetness</span>
+              <h3 class="slide-title">The Legend of Mrs. Cupcake</h3>
+              <p class="slide-desc">Sweet, slightly dramatic, infinitely caring, and forever the golden heart of the family. 24 years of making the world a sweeter place for her favorite brother Arnab.</p>
+              <div class="slide-tags">
+                <span>#MrsCupcake</span>
+                <span>#Birthday24</span>
+                <span>#BestDidiForever</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slider Controls -->
+        <button class="slider-arrow prev" id="slider-prev-btn" aria-label="Previous Slide">‹</button>
+        <button class="slider-arrow next" id="slider-next-btn" aria-label="Next Slide">›</button>
+
+        <!-- Slider Indicator Dots & Progress -->
+        <div class="slider-nav-bar">
+          <div class="slider-dots" id="slider-dots-container">
+            <button class="slider-dot active" data-slide="0"></button>
+            <button class="slider-dot" data-slide="1"></button>
+            <button class="slider-dot" data-slide="2"></button>
+            <button class="slider-dot" data-slide="3"></button>
+            <button class="slider-dot" data-slide="4"></button>
+          </div>
+          <div class="slider-play-toggle">
+            <button id="slider-play-btn" class="slider-icon-btn" title="Pause / Play Auto-Slide">⏸</button>
+            <span class="slider-counter" id="slider-counter">1 / 5</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 24 REASONS SLIDE DECK SECTION -->
+    <section id="reasons-slider-section" class="reasons-section">
+      <div class="section-header text-center">
+        <span class="section-tag">24th Birthday Special 🎂</span>
+        <h2 class="section-title">24 Reasons Why Didi is Unmatched 👑</h2>
+        <p class="section-subtitle">24 sweet, funny & timeless reasons why Mrittica Didi is the universe's greatest elder sister.</p>
+      </div>
+
+      <div class="reasons-carousel-container glass-panel">
+        <div class="reasons-badge-counter">
+          <span class="badge-num" id="reason-num-badge">Reason #1</span>
+          <span class="badge-of">of 24</span>
+        </div>
+
+        <div class="reason-display-card" id="reason-display-card">
+          <div class="reason-icon-large" id="reason-icon">🧁</div>
+          <h3 class="reason-title" id="reason-title">The Secret Sweetness Stash</h3>
+          <p class="reason-desc" id="reason-desc">She always secretly shares extra dessert, treats, and snacks with Arnab when Mom isn't watching!</p>
+          <div class="reason-footer-tag" id="reason-tag">#CertifiedSweetheart</div>
+        </div>
+
+        <div class="reasons-controls-bar">
+          <button id="reason-prev-btn" class="btn-secondary mini-btn">← Previous</button>
+          <button id="reason-random-btn" class="btn-outline mini-btn">🎲 Surprise Reason</button>
+          <button id="reason-next-btn" class="btn-primary mini-btn">Next Reason →</button>
+        </div>
+
+        <!-- 24 Micro Dots Reel -->
+        <div class="reasons-progress-dots" id="reasons-dots-bar">
+          <!-- 24 dots generated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- PHOTO GALLERY SECTION -->
+    <section id="gallery" class="gallery-section">
+      <div class="section-header text-center">
+        <span class="section-tag">Captured Memories</span>
+        <h2 class="section-title">The Mrs. Cupcake Snapshot Gallery</h2>
+        <p class="section-subtitle">A collection of cherished frames featuring Mrittica Didi and Arnab.</p>
+      </div>
+
+      <div class="gallery-grid">
+        <!-- Photo 1 -->
+        <div class="polaroid-card glass-panel" onclick="openLightbox('assets/images/didi_puja_festive.jpg', 'Durga Puja Celebrations — Vibrant yellow saree, purple kurta, abir and endless joy!')">
+          <div class="polaroid-pin">📌</div>
+          <div class="polaroid-img-container">
+            <img src="assets/images/didi_puja_festive.jpg" alt="Festive Puja Celebration" class="polaroid-img">
+          </div>
+          <div class="polaroid-details">
+            <span class="polaroid-caption">Festive Royalty ✨</span>
+            <span class="polaroid-date">Durga Puja / Bijoya</span>
+            <p class="polaroid-note">"When Didi outshines all the festival lights in yellow!"</p>
+          </div>
+        </div>
+
+        <!-- Photo 2 -->
+        <div class="polaroid-card glass-panel" onclick="openLightbox('assets/images/didi_vacation_mallroad.jpg', 'Mountain Vacation — Mall Road adventures with the giant Red Panda mascot!')">
+          <div class="polaroid-pin">📌</div>
+          <div class="polaroid-img-container">
+            <img src="assets/images/didi_vacation_mallroad.jpg" alt="Vacation at Mall Road" class="polaroid-img">
+          </div>
+          <div class="polaroid-details">
+            <span class="polaroid-caption">Red Panda Squad 🐾</span>
+            <span class="polaroid-date">Mall Road Getaway</span>
+            <p class="polaroid-note">"Thumbs up for cool mountain air and warm sibling smiles."</p>
+          </div>
+        </div>
+
+        <!-- Photo 3 -->
+        <div class="polaroid-card glass-panel" onclick="openLightbox('assets/images/didi_evening_selfie.jpg', 'Evening Chills — Didi looking sharp in glasses with her little bro Arnab!')">
+          <div class="polaroid-pin">📌</div>
+          <div class="polaroid-img-container">
+            <img src="assets/images/didi_evening_selfie.jpg" alt="Cozy Evening Selfie" class="polaroid-img">
+          </div>
+          <div class="polaroid-details">
+            <span class="polaroid-caption">Specs & Sass 👓</span>
+            <span class="polaroid-date">Evening Talks</span>
+            <p class="polaroid-note">"Didi's signature specs look — intellectual and sweet!"</p>
+          </div>
+        </div>
+
+        <!-- Photo 4 -->
+        <div class="polaroid-card glass-panel" onclick="openLightbox('assets/images/didi_night_walk.jpg', 'Night Street Promenade — Walking down the avenue, glowing under the city lights.')">
+          <div class="polaroid-pin">📌</div>
+          <div class="polaroid-img-container">
+            <img src="assets/images/didi_night_walk.jpg" alt="Night City Walk" class="polaroid-img">
+          </div>
+          <div class="polaroid-details">
+            <span class="polaroid-caption">Night Walk Vibes 🌙</span>
+            <span class="polaroid-date">City Lights</span>
+            <p class="polaroid-note">"'Grow. There is a future version don’t look back' — unstoppable!"</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE QUIZ SECTION -->
+    <section id="quiz" class="quiz-section">
+      <div class="section-header text-center">
+        <span class="section-tag">Interactive Fun</span>
+        <h2 class="section-title">The Ultimate Mrs. Cupcake Quiz! 🎯</h2>
+        <p class="section-subtitle">How well do you know Mrittica Didi and her bond with Arnab? Test your knowledge!</p>
+      </div>
+
+      <div class="quiz-card glass-panel" id="quiz-wrapper">
+        <!-- Quiz Header -->
+        <div class="quiz-top-bar">
+          <div class="quiz-progress-text">Question <span id="current-q-num">1</span> of <span id="total-q-num">5</span></div>
+          <div class="quiz-score-pill">
+            <span>Score:</span>
+            <strong id="quiz-score-display">0</strong> / 50
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="quiz-progress-track">
+          <div class="quiz-progress-fill" id="quiz-progress-bar"></div>
+        </div>
+
+        <!-- Active Question Container -->
+        <div id="quiz-question-container" class="quiz-question-box">
+          <span class="question-emoji" id="question-emoji">🧁</span>
+          <h3 class="question-title" id="question-text">Loading question...</h3>
+          <div class="options-grid" id="options-grid">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Feedback Banner -->
+        <div id="quiz-feedback" class="quiz-feedback-box hidden">
+          <div class="feedback-icon" id="feedback-icon">🎉</div>
+          <div class="feedback-text" id="feedback-text">Correct!</div>
+          <button id="next-question-btn" class="btn-primary mini-btn">Next Question →</button>
+        </div>
+
+        <!-- Final Results Container (Hidden initially) -->
+        <div id="quiz-results-container" class="quiz-results-box hidden">
+          <div class="result-trophy">🏆</div>
+          <h3 class="result-title">Quiz Completed!</h3>
+          <p class="result-score-summary">You scored <span id="final-score-val">50</span> out of 50!</p>
+          <div class="result-badge-card glass-panel" id="result-badge-card">
+            <span class="badge-icon">👑</span>
+            <h4 id="result-badge-title">Official Mrs. Cupcake Devotee!</h4>
+            <p id="result-badge-desc">You know Mrittica Didi and Arnab inside out. A bond sweeter than all bakery cupcakes combined!</p>
+          </div>
+          <div class="result-actions">
+            <button id="restart-quiz-btn" class="btn-primary">Play Again 🔄</button>
+            <a href="#letter" class="btn-secondary">Read Arnab's Letter 💌</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIDI'S FUN ARCADE HUB (4 GAMES!) -->
+    <section id="arcade-hub" class="arcade-hub-section">
+      <div class="section-header text-center">
+        <span class="section-tag">Didi's Game Zone 🎮</span>
+        <h2 class="section-title">Mrs. Cupcake's Fun Arcade Hub</h2>
+        <p class="section-subtitle">4 handcrafted mini-games dedicated to celebrating Mrittica Didi!</p>
+      </div>
+
+      <!-- Arcade Game Switcher Tabs -->
+      <div class="arcade-tabs-bar glass-panel">
+        <button class="arcade-tab-btn active" data-game="rush">
+          <span class="tab-emoji">🧁</span>
+          <span class="tab-title">Cupcake Rush</span>
+        </button>
+        <button class="arcade-tab-btn" data-game="handi">
+          <span class="tab-emoji">🪅</span>
+          <span class="tab-title">Festive Handi Burst</span>
+        </button>
+        <button class="arcade-tab-btn" data-game="match">
+          <span class="tab-emoji">🃏</span>
+          <span class="tab-title">Memory Match</span>
+        </button>
+        <button class="arcade-tab-btn" data-game="cake" id="cake-studio-section">
+          <span class="tab-emoji">🎂</span>
+          <span class="tab-title">24th Cake Studio</span>
+        </button>
+      </div>
+
+      <div class="arcade-viewport glass-panel">
+        <!-- GAME 1: CUPCAKE RUSH ARCADE -->
+        <div id="game-view-rush" class="arcade-game-view active">
+          <div class="game-scoreboard">
+            <div class="game-stat">
+              <span class="stat-label">Time Remaining</span>
+              <strong class="stat-val" id="game-timer">30s</strong>
+            </div>
+            <div class="game-stat">
+              <span class="stat-label">Cupcakes Caught</span>
+              <strong class="stat-val" id="game-score">0</strong>
+            </div>
+            <div class="game-stat">
+              <span class="stat-label">High Score</span>
+              <strong class="stat-val" id="game-highscore">0</strong>
+            </div>
+          </div>
+
+          <div class="canvas-container">
+            <canvas id="cupcake-game-canvas" width="600" height="380"></canvas>
+
+            <!-- Game Overlay Start / Game Over -->
+            <div id="game-start-overlay" class="game-canvas-overlay">
+              <div class="overlay-content">
+                <span class="overlay-icon">🧁</span>
+                <h3>Catch Mrs. Cupcake's Treats!</h3>
+                <p>Move the basket left & right using finger drag, touch buttons, or arrow keys.<br>Catch cupcakes & hearts (+10 pts)! Avoid storm clouds (-5 pts)!</p>
+                <button id="start-game-btn" class="btn-primary pulse-btn">Start Game 🚀</button>
+              </div>
+            </div>
+
+            <div id="game-over-overlay" class="game-canvas-overlay hidden">
+              <div class="overlay-content">
+                <span class="overlay-icon">🎉</span>
+                <h3>Time's Up!</h3>
+                <p>You collected <strong id="final-game-score">0</strong> cupcakes for Didi!</p>
+                <p class="sweet-message" id="game-final-message">Mrs. Cupcake is proud of your reflexes!</p>
+                <button id="play-again-game-btn" class="btn-primary">Catch Again 🔁</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mobile On-Screen Touch Controls (iOS & Android) -->
+          <div class="mobile-game-touch-controls" id="mobile-game-touch-controls">
+            <button id="touch-btn-left" class="game-touch-btn" aria-label="Move basket left">
+              <span class="btn-arrow-icon">◀</span>
+              <span>Move Left</span>
+            </button>
+            <button id="touch-btn-right" class="game-touch-btn" aria-label="Move basket right">
+              <span>Move Right</span>
+              <span class="btn-arrow-icon">▶</span>
+            </button>
+          </div>
+
+          <div class="game-controls-hint">
+            <span>💡 Controls: Drag Finger, Tap Canvas, Touch Buttons, or ◄ Arrow Keys ►</span>
+          </div>
+        </div>
+
+        <!-- GAME 2: FESTIVE HANDI BURST -->
+        <div id="game-view-handi" class="arcade-game-view hidden">
+          <div class="handi-game-card">
+            <div class="handi-header">
+              <span class="arcade-subtag">Bengali Festive Matka Crack</span>
+              <h3>Festive Handi Burst 🪅</h3>
+              <p>Whack the festive Handi 5 times to crack it open, shower treats, and reveal Didi's Royal Treasure!</p>
+            </div>
+
+            <div class="handi-meter-wrapper">
+              <div class="meter-label">
+                <span>Handi Durability</span>
+                <strong id="handi-hits-label">5 / 5 Hits Left</strong>
+              </div>
+              <div class="handi-health-bar">
+                <div class="handi-health-fill" id="handi-health-fill" style="width: 100%;"></div>
+              </div>
+            </div>
+
+            <!-- Suspended Swinging Handi Arena -->
+            <div class="handi-arena" id="handi-arena">
+              <div class="handi-ropes"></div>
+              <div class="handi-pot-container" id="handi-pot">
+                <div class="handi-garland">🌸 🌼 🌸</div>
+                <div class="handi-pot-body" id="handi-pot-body">
+                  <div class="handi-clay-shape">
+                    <span class="handi-art">🏺</span>
+                    <div class="pot-crack-lines" id="pot-cracks"></div>
+                  </div>
+                </div>
+                <div class="handi-tassels">✨ 🪅 ✨</div>
+              </div>
+
+              <!-- Whack Impact Stick -->
+              <div class="whack-stick" id="whack-stick">🏏</div>
+
+              <!-- Burst Reward Card -->
+              <div class="handi-burst-card hidden" id="handi-burst-card">
+                <span class="burst-icon">👑</span>
+                <h4>🎉 HANDI SHATTERED! 🎉</h4>
+                <p class="burst-title">Didi's Golden Sisterhood Treasure Unlocked!</p>
+                <div class="burst-reward-badge">
+                  <span>🏆 Official Sisterhood Decree:</span>
+                  <strong>"Mrittica Didi: Certified Queen of Hearts & Greatest Sister in the Galaxy"</strong>
+                </div>
+                <p class="burst-privilege">🎁 Perks: 1000 Free Brotherly Hugs, Unlimited Dessert Rights & Zero Chores Forever!</p>
+                <button id="reset-handi-btn" class="btn-primary mini-btn">Hang Another Festive Handi 🪅</button>
+              </div>
+            </div>
+
+            <div class="handi-action-bar">
+              <button id="hit-handi-btn" class="btn-primary pulse-btn hit-btn">
+                <span>🏏 Whack the Handi!</span>
+              </button>
+              <span class="handi-hint">💡 Tap the button or tap directly on the Handi!</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- GAME 3: SWEET MEMORY MATCH -->
+        <div id="game-view-match" class="arcade-game-view hidden">
+          <div class="match-game-card">
+            <div class="match-header">
+              <span class="arcade-subtag">Sisterhood Memory Puzzle</span>
+              <h3>Sweet Memory Match 🃏</h3>
+              <p>Find and match all 6 pairs of sibling memory cards in the fewest moves!</p>
+            </div>
+
+            <div class="match-scoreboard">
+              <div class="match-stat">
+                <span class="m-label">Moves</span>
+                <strong id="match-moves-count">0</strong>
+              </div>
+              <div class="match-stat">
+                <span class="m-label">Matches</span>
+                <strong id="match-pairs-count">0 / 6</strong>
+              </div>
+              <div class="match-stat">
+                <span class="m-label">Timer</span>
+                <strong id="match-timer-count">00:00</strong>
+              </div>
+              <button id="reset-match-btn" class="btn-secondary mini-btn" title="Restart Game">🔄 Reset</button>
+            </div>
+
+            <!-- Memory Grid (12 Cards) -->
+            <div class="memory-grid" id="memory-cards-grid">
+              <!-- Dynamically populated by JS -->
+            </div>
+
+            <!-- Victory Card -->
+            <div class="match-victory-overlay hidden" id="match-victory-overlay">
+              <div class="victory-card glass-panel">
+                <span class="victory-trophy">🏆</span>
+                <h3>Memory Master!</h3>
+                <p>You matched all sibling memories in <strong id="vic-moves">0</strong> moves and <strong id="vic-time">00:00</strong>!</p>
+                <p class="vic-sweet-quote">"A bond this sharp and sweet will stay timeless forever!"</p>
+                <button id="match-play-again-btn" class="btn-primary">Play Match Again 🔁</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GAME 4: 24TH BIRTHDAY CAKE STUDIO -->
+        <div id="game-view-cake" class="arcade-game-view hidden">
+          <div class="cake-game-card">
+            <div class="cake-header">
+              <span class="arcade-subtag">Interactive Birthday Celebration</span>
+              <h3>24th Birthday Cake Studio 🎂</h3>
+              <p>Customize Didi’s 24th birthday cake, light the candles, make a wish, and blow them out!</p>
+            </div>
+
+            <div class="cake-studio-layout">
+              <!-- Cake Display Area -->
+              <div class="cake-stage" id="cake-stage">
+                <!-- Floating Candles with Flames -->
+                <div class="cake-candles-row" id="cake-candles-row">
+                  <div class="candle-wrapper">
+                    <div class="candle-flame lit" id="flame-1"></div>
+                    <div class="candle-wick"></div>
+                    <div class="candle-stick gold-stripe"></div>
+                  </div>
+                  <div class="candle-badge-24">24 ✨</div>
+                  <div class="candle-wrapper">
+                    <div class="candle-flame lit" id="flame-2"></div>
+                    <div class="candle-wick"></div>
+                    <div class="candle-stick pink-stripe"></div>
+                  </div>
+                </div>
+
+                <!-- 3-Tier Illustrated Cake -->
+                <div class="cake-tiers" id="cake-tiers">
+                  <!-- Tier 1 (Top) -->
+                  <div class="cake-tier tier-top frosting-pink" id="tier-top">
+                    <div class="tier-toppings" id="toppings-top">🍒 🍓 🍒</div>
+                  </div>
+                  <!-- Tier 2 (Middle) -->
+                  <div class="cake-tier tier-mid frosting-pink" id="tier-mid">
+                    <div class="tier-toppings" id="toppings-mid">✨ 🧁 ✨</div>
+                  </div>
+                  <!-- Tier 3 (Base) -->
+                  <div class="cake-tier tier-base frosting-pink" id="tier-base">
+                    <div class="tier-toppings" id="toppings-base">👑 Mrs. Cupcake 👑</div>
+                  </div>
+                  <!-- Stand -->
+                  <div class="cake-stand"></div>
+                </div>
+
+                <!-- Wish Success Banner -->
+                <div class="wish-banner hidden" id="wish-banner">
+                  <span class="wish-stars">✨ 🌟 ✨</span>
+                  <h4>🎉 WISH GRANTED! HAPPY 24TH BIRTHDAY! 🎉</h4>
+                  <p>May every single day of your 24th year be sweeter, grander, and filled with unending laughter, Didi!</p>
+                </div>
+              </div>
+
+              <!-- Customizer Controls -->
+              <div class="cake-controls-panel glass-panel">
+                <h4>🎨 Decorate Didi's Cake:</h4>
+
+                <div class="control-group">
+                  <label class="ctrl-label">Frosting Flavor:</label>
+                  <div class="flavor-pills">
+                    <button class="flavor-pill active" data-flavor="frosting-pink">🍓 Strawberry Rose</button>
+                    <button class="flavor-pill" data-flavor="frosting-choco">🍫 Belgian Truffle</button>
+                    <button class="flavor-pill" data-flavor="frosting-gold">🍯 Royal Saffron</button>
+                    <button class="flavor-pill" data-flavor="frosting-cream">🍦 Sweet Vanilla</button>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="ctrl-label">Toppings:</label>
+                  <div class="topping-pills">
+                    <button class="topping-pill active" data-topping="cherries">🍒 Cherries & Berries</button>
+                    <button class="topping-pill" data-topping="sprinkles">✨ Sparkles & Stars</button>
+                    <button class="topping-pill" data-topping="macarons">🍥 Sweet Macarons</button>
+                  </div>
+                </div>
+
+                <div class="cake-action-btns">
+                  <button id="blow-candles-btn" class="btn-primary pulse-btn blow-btn">
+                    <span>💨 Make a Wish & Blow Out Candles!</span>
+                  </button>
+                  <button id="relight-candles-btn" class="btn-outline mini-btn hidden">
+                    <span>🔥 Relight 24th Candles</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SISTERHOOD SOUNDBOARD & WISHES WALL SECTION -->
+    <section id="wishes-section" class="wishes-section">
+      <div class="section-header text-center">
+        <span class="section-tag">Interactive Sisterhood</span>
+        <h2 class="section-title">Sibling Soundboard & Wishes Wall 💖</h2>
+        <p class="section-subtitle">Tap fun sibling quotes and pin sweet birthday blessings for Mrs. Cupcake!</p>
+      </div>
+
+      <div class="wishes-container glass-panel">
+        <!-- Soundboard -->
+        <div class="soundboard-wrapper">
+          <h4 class="hub-subtitle">🔊 Sibling Soundboard (Tap to hear SFX & Quotes!)</h4>
+          <div class="soundboard-grid">
+            <button class="sound-chip" data-sound="scold">
+              <span class="chip-icon">📢</span>
+              <span class="chip-text">"Arnab, go study!"</span>
+            </button>
+            <button class="sound-chip" data-sound="dessert">
+              <span class="chip-icon">🧁</span>
+              <span class="chip-text">"Extra cupcake for Didi!"</span>
+            </button>
+            <button class="sound-chip" data-sound="puja">
+              <span class="chip-icon">🥻</span>
+              <span class="chip-text">"Puja Saree Photoshoot!"</span>
+            </button>
+            <button class="sound-chip" data-sound="panda">
+              <span class="chip-icon">🐾</span>
+              <span class="chip-text">"Red Panda Mountain Squad!"</span>
+            </button>
+            <button class="sound-chip" data-sound="anthem">
+              <span class="chip-icon">🎵</span>
+              <span class="chip-text">"Fakira Vibe Check!"</span>
+            </button>
+            <button class="sound-chip" data-sound="queen">
+              <span class="chip-icon">👑</span>
+              <span class="chip-text">"Super Didi Forever!"</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Wishes Wall -->
+        <div class="wishes-wall-wrapper">
+          <h4 class="hub-subtitle">💌 Family & Sibling Blessing Cards</h4>
+          <div class="wishes-cards-grid" id="wishes-cards-grid">
+            <!-- Sticky Note 1 -->
+            <div class="wish-sticky-card glass-panel">
+              <div class="sticky-pin">📍</div>
+              <p class="wish-text">"Happy 24th Birthday to the most loving Didi! May your life be as radiant as your festive sarees and as sweet as cupcakes."</p>
+              <div class="wish-author-row">
+                <span class="wish-author">— With endless love, Arnab</span>
+                <button class="wish-heart-btn">💖 <span class="like-num">240</span></button>
+              </div>
+            </div>
+
+            <!-- Sticky Note 2 -->
+            <div class="wish-sticky-card glass-panel">
+              <div class="sticky-pin">📍</div>
+              <p class="wish-text">"To Mrs. Cupcake at 24: Keep shining, dreaming big, and never looking back. There is a magnificent future ahead!"</p>
+              <div class="wish-author-row">
+                <span class="wish-author">— Sibling Creed</span>
+                <button class="wish-heart-btn">💖 <span class="like-num">188</span></button>
+              </div>
+            </div>
+
+            <!-- Sticky Note 3 -->
+            <div class="wish-sticky-card glass-panel">
+              <div class="sticky-pin">📍</div>
+              <p class="wish-text">"May this year bring countless mountain vacations, gorgeous sarees, peaceful evenings, and endless cups of steaming tea."</p>
+              <div class="wish-author-row">
+                <span class="wish-author">— Family Blessings</span>
+                <button class="wish-heart-btn">💖 <span class="like-num">156</span></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add Custom Wish Box -->
+          <div class="add-wish-box">
+            <input type="text" id="custom-wish-input" placeholder="Write a sweet birthday wish for Mrittica Didi..." maxlength="120" aria-label="Write a wish">
+            <button id="post-wish-btn" class="btn-primary mini-btn">Pin Wish 📌</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FORTUNE CUPCAKE COMPLIMENT GENERATOR -->
+    <section class="fortune-section">
+      <div class="section-header text-center">
+        <span class="section-tag">Sweet Surprises</span>
+        <h2 class="section-title">The Mrs. Cupcake Fortune Bakery ✨</h2>
+        <p class="section-subtitle">Click the cupcake oven to receive a sweet affirmation or sisterly superpower badge!</p>
+      </div>
+
+      <div class="fortune-card glass-panel">
+        <div class="fortune-cupcake-interactive" id="fortune-cupcake-trigger">
+          <img src="assets/images/cupcake_hero.jpg" alt="Clickable Cupcake" class="fortune-cupcake-img">
+          <div class="click-me-bubble">Click Me! 👆</div>
+        </div>
+
+        <div class="fortune-display-box" id="fortune-display">
+          <p class="fortune-placeholder">"Click the cupcake above to unveil Didi's daily dose of sunshine!"</p>
+        </div>
+
+        <button id="new-fortune-btn" class="btn-primary mini-btn">Unbox Another Reason Didi is the Best 🎁</button>
+      </div>
+    </section>
+
+    <!-- BROTHER'S HEARTFELT LETTER SECTION -->
+    <section id="letter" class="letter-section">
+      <div class="section-header text-center">
+        <span class="section-tag">From the Heart</span>
+        <h2 class="section-title">A Brother's Letter to His Didi 💌</h2>
+        <p class="section-subtitle">Words straight from Arnab to Mrittica, wishing her eternal joy and happiness.</p>
+      </div>
+
+      <div class="envelope-wrapper">
+        <!-- Interactive Envelope -->
+        <div class="envelope-outer" id="envelope-box">
+          <div class="envelope-flap" id="envelope-flap"></div>
+          <div class="wax-seal" id="wax-seal" title="Click to break the seal and open letter!">
+            <div class="wax-inner">
+              <span class="seal-initials">M & A</span>
+            </div>
+          </div>
+          <div class="envelope-label">
+            <span class="label-to">For: My Dearest Didi (Mrs. Cupcake) 🧁</span>
+            <span class="label-from">From: Your Little Brother, Arnab</span>
+          </div>
+        </div>
+
+        <!-- Unfolded Letter Paper -->
+        <div class="letter-paper glass-panel hidden" id="letter-content">
+          <div class="letter-decorations">
+            <span class="corner-rose">🌸</span>
+            <span class="corner-rose right">🌸</span>
+          </div>
+
+          <div class="letter-inner">
+            <h3 class="letter-salutation">My Dearest Mrittica Didi,</h3>
+
+            <p class="letter-paragraph">
+              Turning 24 is a milestone, but to me, you will always be the same sweet, caring, and slightly dramatic
+              elder sister who has been my rock through every phase of growing up.
+            </p>
+
+            <p class="letter-paragraph">
+              I gave you the nickname <strong>"Mrs. Cupcake"</strong> not just because you love sweetness, but because
+              you make every ordinary day feel like a celebration. Whether we are dressing up for Durga Puja, traveling
+              to hill towns, sharing funny selfies, or arguing over the most trivial things—having you as my Didi is
+              the greatest privilege and blessing life could have given me.
+            </p>
+
+            <p class="letter-paragraph">
+              As you step forward in life, remember: <em>"There is a future version, don't look back."</em>
+              May your days be filled with endless laughter, boundless success, good health, and all the cupcakes in
+              the world. No matter how old we get, I will always be right here cheering for you, annoying you, and
+              protecting you just like you have always protected me.
+            </p>
+
+            <div class="letter-signoff">
+              <p class="signoff-words">With all my love and blessings,</p>
+              <p class="signoff-signature">Your Little Bro, Arnab ❤️</p>
+              <span class="signoff-date">Forever & Always</span>
+            </div>
+          </div>
+
+          <div class="letter-actions">
+            <button id="reclose-letter-btn" class="btn-outline mini-btn">Fold Back into Envelope ✉️</button>
+            <button id="print-letter-btn" class="btn-primary mini-btn" onclick="window.print()">Save / Print Letter 🖨️</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- LIGHTBOX MODAL FOR MEMORIES -->
+  <div id="lightbox-modal" class="lightbox-overlay hidden" onclick="closeLightbox(event)">
+    <div class="lightbox-container glass-panel">
+      <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close Preview">&times;</button>
+      <div class="lightbox-content">
+        <img id="lightbox-img" src="" alt="Enlarged Memory">
+        <div class="lightbox-meta">
+          <h4 id="lightbox-caption">Memory with Didi</h4>
+          <span class="lightbox-tag">Captured with Love by Arnab</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-cupcake-row">
+        <span>🧁</span>
+        <span>✨</span>
+        <span>💖</span>
+        <span>✨</span>
+        <span>🧁</span>
+      </div>
+      <p class="footer-main">
+        Handcrafted with boundless love for <strong>Mrittica Naskar</strong> (Mrs. Cupcake) by her brother <strong>Arnab</strong>.
+      </p>
+      <p class="footer-sub">
+        Background Soundtrack: <em>"Fakira"</em> performed by Sanam Puri & Neeti Mohan.
+      </p>
+      <div class="footer-back-to-top">
+        <a href="#hero" class="back-to-top-btn" title="Back to top">↑ Back to Top</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- YouTube IFrame API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <!-- Application Logic -->
+  <script src="script.js"></script>
+</body>
+</html>
